@@ -34,3 +34,6 @@ transform = Transform3D(-0.93420297, 0, -0.35674194, 0, 1, 0, 0.35674194, 0, -0.
 
 [node name="house" parent="." unique_id=788854979 instance=ExtResource("2_0xm2m")]
 transform = Transform3D(-6.60739, 0, -1.0267489, 0, 6.6866894, 0, 1.0267489, 0, -6.60739, -1.4472084, -0.006453812, -3.0016947)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=741128553]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7065005, 1.7365117, -5.340311)

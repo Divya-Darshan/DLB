@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d2g78x4tn7fce"
 path.s3tc="res://.godot/imported/shotgun.png-054d370bf1b73adab88b1ffd13c9e5c9.s3tc.ctex"
+path.etc2="res://.godot/imported/shotgun.png-054d370bf1b73adab88b1ffd13c9e5c9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://player/hold/guns/shotgun.png"
-dest_files=["res://.godot/imported/shotgun.png-054d370bf1b73adab88b1ffd13c9e5c9.s3tc.ctex"]
+dest_files=["res://.godot/imported/shotgun.png-054d370bf1b73adab88b1ffd13c9e5c9.s3tc.ctex", "res://.godot/imported/shotgun.png-054d370bf1b73adab88b1ffd13c9e5c9.etc2.ctex"]
 
 [params]
 
