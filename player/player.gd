@@ -1,67 +1,52 @@
 extends CharacterBody3D
 
-const SPEED = 10.0
-const JUMP_VELOCITY = 5.0
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+const MOUSE_SENSITIVITY = 0.003
 
-# Player nodes
-@onready var head: Node3D = $head
-@onready var touch_debug: ColorRect = $CanvasLayer/CameraTouch/Touch_debug
+@onready var camera_3d: Camera3D = $Camera3D
 
 func _ready() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# Capture the mouse cursor for first-person control
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+func _unhandled_input(event: InputEvent) -> void:
+	# Press Escape to release or recapture your mouse
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	# Only rotate if the mouse is captured
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
+		# Rotate the player body left and right (Yaw)
+		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
+		
+		# Rotate the camera up and down (Pitch)
+		camera_3d.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
+		
+		# Clamp camera rotation to prevent flipping upside down
+		camera_3d.rotation.x = clamp(camera_3d.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 func _physics_process(delta: float) -> void:
-	# Gravity
+	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Jump
-	if Input.is_action_just_pressed("space") and is_on_floor():
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# =========================================================================
-	# CAMERA ORIENTATION & UP/DOWN PITCH FIX
-	# =========================================================================
+	# Get input direction using your WASD input map actions ("a", "d", "w", "s")
 	var input_dir := Input.get_vector("a", "d", "w", "s")
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
-	# 1. Get the camera/head's forward and right directions
-	var forward := -head.global_transform.basis.z
-	var right := head.global_transform.basis.x
-	
-	# 2. FLATTEN the up/down (pitch) tilt by zeroing out the Y axis. 
-	#    This ensures looking up or down never tilts your movement into the floor/sky.
-	forward.y = 0.0
-	forward = forward.normalized()
-	
-	right.y = 0.0
-	right = right.normalized()
-	
-	# 3. Combine inputs with the flattened camera orientation
-	var direction := (forward * -input_dir.y + right * input_dir.x).normalized()
-	# =========================================================================
-
-	# Ground and air movement logic
-	if is_on_floor():
-		if direction != Vector3.ZERO:
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
-		else:
-			velocity.x = 0.0
-			velocity.z = 0.0
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
 	else:
-		velocity.x = lerp(velocity.x, direction.x * SPEED, delta * 2.0)
-		velocity.z = lerp(velocity.z, direction.z * SPEED, delta * 2.0)
-
-	# Toggle debug view
-	if Input.is_action_pressed("0"):
-		touch_debug.visible = !touch_debug.visible
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
-
-	# Head updates headbob independently
-	if head.has_method("update_headbob"):
-		head.update_headbob(delta, velocity.length(), is_on_floor())
