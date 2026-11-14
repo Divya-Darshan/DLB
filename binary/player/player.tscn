@@ -1,0 +1,149 @@
+[gd_scene format=3 uid="uid://bqyj4duv3rrlm"]
+
+[ext_resource type="Script" uid="uid://br8xhqwi3uutn" path="res://player/player.gd" id="1_oul6g"]
+
+[sub_resource type="GDScript" id="GDScript_oul6g"]
+script/source = "extends CanvasLayer
+
+@onready var panal: ColorRect = $panal
+@onready var speed_input: TextEdit = $panal/speed
+@onready var jump_input: TextEdit = $panal/jump
+@onready var player: CharacterBody3D = owner
+
+func _ready() -> void:
+	load_config()
+	panal.visible = false
+	if player:
+		speed_input.text = str(player.SPEED)
+		jump_input.text = str(player.JUMP_VELOCITY)
+
+func _process(delta: float) -> void:
+	if panal.visible:
+		filter_numeric_input(speed_input)
+		filter_numeric_input(jump_input)
+
+	if Input.is_action_just_pressed(\"esc\"):
+		panal.visible = !panal.visible
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if panal.visible else Input.MOUSE_MODE_CAPTURED
+		
+		# Refresh UI text from the player whenever the panel is opened
+		if panal.visible and player:
+			speed_input.text = str(player.SPEED)
+			jump_input.text = str(player.JUMP_VELOCITY)
+		
+		# Save values when closing the panel
+		if not panal.visible:
+			save_config()
+
+func filter_numeric_input(box: TextEdit) -> void:
+	var current_text = box.text
+	var filtered_text = \"\"
+	
+	for i in range(current_text.length()):
+		var c = current_text[i]
+		if c.is_valid_int() or c == \".\" or c == \"-\":
+			filtered_text += c
+			
+	if filtered_text != current_text:
+		box.text = filtered_text
+		box.set_caret_column(filtered_text.length())
+
+func save_config() -> void:
+	var speed_val = speed_input.text.strip_edges()
+	var jump_val = jump_input.text.strip_edges()
+	
+	if speed_val.is_valid_float() and jump_val.is_valid_float():
+		if player:
+			player.SPEED = speed_val.to_float()
+			player.JUMP_VELOCITY = jump_val.to_float()
+		
+		var file = FileAccess.open(\"res://config.txt\", FileAccess.WRITE)
+		if file:
+			file.store_string(\"SPEED=\" + speed_val + \"\\nJUMP=\" + jump_val)
+
+func load_config() -> void:
+	if FileAccess.file_exists(\"res://config.txt\"):
+		var file = FileAccess.open(\"res://config.txt\", FileAccess.READ)
+		while not file.eof_reached():
+			var line = file.get_line().strip_edges()
+			if line.begins_with(\"SPEED=\"):
+				speed_input.text = line.get_slice(\"=\", 1)
+			elif line.begins_with(\"JUMP=\"):
+				jump_input.text = line.get_slice(\"=\", 1)
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1bvp3"]
+radius = 0.33107638
+height = 0.7077691
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_t2gii"]
+
+[node name="player" type="CharacterBody3D" unique_id=1918745686]
+script = ExtResource("1_oul6g")
+
+[node name="menu" type="CanvasLayer" parent="." unique_id=85284207]
+script = SubResource("GDScript_oul6g")
+
+[node name="panal" type="ColorRect" parent="menu" unique_id=1553033159]
+self_modulate = Color(0.14622876, 0.14622876, 0.14622873, 0.5176471)
+show_behind_parent = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -263.0
+offset_right = 340.0
+offset_bottom = 206.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.0793041, 1.0793041)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="speed" type="TextEdit" parent="menu/panal" unique_id=2065468636]
+layout_mode = 0
+offset_left = 245.5286
+offset_top = 77.82793
+offset_right = 345.5286
+offset_bottom = 127.82793
+placeholder_text = "speed"
+
+[node name="Label" type="Label" parent="menu/panal/speed" unique_id=1944519827]
+layout_mode = 0
+offset_left = -126.93367
+offset_top = 6.4856606
+offset_right = -66.93367
+offset_bottom = 29.48566
+scale = Vector2(1.4617511, 1.4617511)
+text = "speed"
+
+[node name="jump" type="TextEdit" parent="menu/panal" unique_id=139144634]
+layout_mode = 0
+offset_left = 248.30814
+offset_top = 155.65585
+offset_right = 348.30814
+offset_bottom = 205.65585
+placeholder_text = "jump"
+
+[node name="jump hight" type="Label" parent="menu/panal/jump" unique_id=848111099]
+layout_mode = 0
+offset_left = -149.17023
+offset_top = 6.4856606
+offset_right = -64.17023
+offset_bottom = 55.48566
+scale = Vector2(1.4617511, 1.4617511)
+text = "jump hight
+"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1031255661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.041612208, 0.35777256, -0.0067719817)
+shape = SubResource("CapsuleShape3D_1bvp3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=593174975]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0313457, 0)
+mesh = SubResource("CapsuleMesh_t2gii")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1795378332]
+transform = Transform3D(1, 0, 0, 0, 0.956483, 0.29178837, 0, -0.29178837, 0.956483, 0, 2.1770399, -0.08276582)
