@@ -4,10 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://c0jm8el4u8s5t" path="res://model/church.blend" id="2_0xm2m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
-sky_top_color = Color(0.14927575, 0.18683401, 0.23686486, 1)
-sky_horizon_color = Color(0.5706855, 0.566898, 0.56478465, 1)
-ground_bottom_color = Color(0.38719693, 0.33448854, 0.27600467, 1)
-ground_horizon_color = Color(0.5706855, 0.566898, 0.56478465, 1)
+sky_top_color = Color(0.10475271, 0.13454255, 0.17225316, 1)
+sky_horizon_color = Color(0.2429911, 0.24497056, 0.24852829, 1)
+ground_bottom_color = Color(0.113978006, 0.09210601, 0.06862631, 1)
+ground_horizon_color = Color(0.2429911, 0.24497056, 0.24852829, 1)
 energy_multiplier = 0.2
 
 [sub_resource type="Sky" id="Sky_h2yge"]
@@ -15,32 +15,65 @@ sky_material = SubResource("ProceduralSkyMaterial_0xm2m")
 
 [sub_resource type="Environment" id="Environment_1bvp3"]
 background_mode = 2
+background_energy_multiplier = 7.15
 sky = SubResource("Sky_h2yge")
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
-albedo_color = Color(0, 0, 0, 1)
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_0xm2m"]
+_shader_parameters = {
+&"bias_distance": null,
+&"blend_sharpness": null,
+&"depth_blur": null,
+&"distant_normal_scale": null,
+&"flat_terrain_normals": null,
+&"general_uniforms": null,
+&"ground_level": null,
+&"mipmap_bias": null,
+&"mipmaps": null,
+&"private": null,
+&"region_blend": null
+}
+show_checkered = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+backlight_enabled = true
+backlight = Color(0.5, 0.5, 0.5, 1)
+distance_fade_mode = 1
+distance_fade_min_distance = 128.0
+distance_fade_max_distance = 96.0
+metadata/terrain3d_generated_material = true
+
+[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_1bvp3"]
+generated_type = 1
+height_offset = 0.5
+density = 10.0
+material_override = SubResource("StandardMaterial3D_h2yge")
+last_lod = 0
+last_shadow_lod = 0
+lod0_range = 128.0
+
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_lquwl"]
+mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_1bvp3")])
 
 [node name="main" type="Node3D" unique_id=454178515]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1354909430]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=601105249]
 environment = SubResource("Environment_1bvp3")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2017945820]
-transform = Transform3D(-0.68835455, 0.29272145, -0.6636883, 0, 0.91495967, 0.40354532, 0.7253744, 0.27778226, -0.62981665, 0, 0, 0)
-light_color = Color(0.27606508, 0.2760653, 0.2760651, 1)
-light_energy = 8.45
-shadow_enabled = true
-directional_shadow_max_distance = 25.0
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=27277126]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.649551, -0.27102566, -95.7189)
-use_collision = true
-size = Vector3(942.3456, 0.51904297, 1150.127)
-material = SubResource("StandardMaterial3D_0xm2m")
 
 [node name="player" parent="." unique_id=1918745686 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(-0.93420297, 0, -0.35674194, 0, 1, 0, 0.35674194, 0, -0.93420297, -0.021686554, 1.1945622, -20.957384)
 
 [node name="church" parent="." unique_id=1329474423 instance=ExtResource("2_0xm2m")]
 transform = Transform3D(-0.9987276, 0, -0.05042949, 0, 1, 0, 0.05042949, 0, -0.9987276, 1.1657671, -0.09506297, -12.670886)
+
+[node name="Terrain3D" type="Terrain3D" parent="." unique_id=1279869376]
+data_directory = "res://terrain"
+material = SubResource("Terrain3DMaterial_0xm2m")
+assets = SubResource("Terrain3DAssets_lquwl")
+displacement_sharpness = 0.5
+show_checkered = true
+top_level = true
+metadata/_edit_lock_ = true

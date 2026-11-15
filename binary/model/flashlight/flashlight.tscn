@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cgtkwbyj13mc"]
+
+[ext_resource type="PackedScene" uid="uid://0b30csavpng0" path="res://model/flashlight/Flashlight.blend" id="1_huiur"]
+
+[sub_resource type="GDScript" id="GDScript_uwckm"]
+script/source = "extends Node3D
+
+@onready var spot: SpotLight3D = $Spot
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed(\"f\"):
+		spot.visible = !spot.visible
+"
+
+[node name="Flashlight" unique_id=1687413042 instance=ExtResource("1_huiur")]
+script = SubResource("GDScript_uwckm")
