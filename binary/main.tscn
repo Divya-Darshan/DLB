@@ -1,39 +1,79 @@
 [gd_scene format=3 uid="uid://bwejk3iqorlhc"]
 
 [ext_resource type="PackedScene" uid="uid://bqyj4duv3rrlm" path="res://player/player.tscn" id="1_ig7tw"]
-[ext_resource type="PackedScene" uid="uid://bov4rc6cyhrl" path="res://house.blend" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://c0jm8el4u8s5t" path="res://model/church.blend" id="2_0xm2m"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
+sky_top_color = Color(0.10475271, 0.13454255, 0.17225316, 1)
+sky_horizon_color = Color(0.2429911, 0.24497056, 0.24852829, 1)
+ground_bottom_color = Color(0.113978006, 0.09210601, 0.06862631, 1)
+ground_horizon_color = Color(0.2429911, 0.24497056, 0.24852829, 1)
+energy_multiplier = 0.2
 
-[sub_resource type="Sky" id="Sky_0xm2m"]
-sky_material = SubResource("ProceduralSkyMaterial_ig7tw")
+[sub_resource type="Sky" id="Sky_h2yge"]
+sky_material = SubResource("ProceduralSkyMaterial_0xm2m")
 
-[sub_resource type="Environment" id="Environment_h2yge"]
+[sub_resource type="Environment" id="Environment_1bvp3"]
 background_mode = 2
-sky = SubResource("Sky_0xm2m")
+background_energy_multiplier = 7.15
+sky = SubResource("Sky_h2yge")
 glow_enabled = true
+
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_0xm2m"]
+_shader_parameters = {
+&"bias_distance": null,
+&"blend_sharpness": null,
+&"depth_blur": null,
+&"distant_normal_scale": null,
+&"flat_terrain_normals": null,
+&"general_uniforms": null,
+&"ground_level": null,
+&"mipmap_bias": null,
+&"mipmaps": null,
+&"private": null,
+&"region_blend": null
+}
+show_checkered = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+backlight_enabled = true
+backlight = Color(0.5, 0.5, 0.5, 1)
+distance_fade_mode = 1
+distance_fade_min_distance = 128.0
+distance_fade_max_distance = 96.0
+metadata/terrain3d_generated_material = true
+
+[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_1bvp3"]
+generated_type = 1
+height_offset = 0.5
+density = 10.0
+material_override = SubResource("StandardMaterial3D_h2yge")
+last_lod = 0
+last_shadow_lod = 0
+lod0_range = 128.0
+
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_lquwl"]
+mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_1bvp3")])
 
 [node name="main" type="Node3D" unique_id=454178515]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=929965344]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1635320879]
-environment = SubResource("Environment_h2yge")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=27277126]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.217957, -0.27102566, -3.036089)
-use_collision = true
-size = Vector3(296.95667, 0.51904297, 342.6608)
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=601105249]
+environment = SubResource("Environment_1bvp3")
 
 [node name="player" parent="." unique_id=1918745686 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(-0.93420297, 0, -0.35674194, 0, 1, 0, 0.35674194, 0, -0.93420297, -6.3905764, 0.33707356, -21.099068)
+transform = Transform3D(-0.93420297, 0, -0.35674194, 0, 1, 0, 0.35674194, 0, -0.93420297, -0.021686554, 1.1945622, -3.2029343)
 
-[node name="house" parent="." unique_id=788854979 instance=ExtResource("2_0xm2m")]
-transform = Transform3D(-6.60739, 0, -1.0267489, 0, 6.6866894, 0, 1.0267489, 0, -6.60739, -1.4472084, -0.006453812, -3.0016947)
+[node name="church" parent="." unique_id=1329474423 instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-0.9987276, 0, -0.05042949, 0, 1, 0, 0.05042949, 0, -0.9987276, 2.1556394, 1.4104621, -3.3429546)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=741128553]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7065005, 1.7365117, -5.340311)
+[node name="Terrain3D" type="Terrain3D" parent="." unique_id=1279869376]
+data_directory = "res://terrain"
+material = SubResource("Terrain3DMaterial_0xm2m")
+assets = SubResource("Terrain3DAssets_lquwl")
+displacement_sharpness = 0.5
+show_checkered = true
+top_level = true
+metadata/_edit_lock_ = true

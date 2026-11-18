@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bqyj4duv3rrlm"]
 
 [ext_resource type="Script" uid="uid://br8xhqwi3uutn" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="PackedScene" uid="uid://cgtkwbyj13mc" path="res://model/flashlight/flashlight.tscn" id="2_rkbax"]
 
 [sub_resource type="GDScript" id="GDScript_oul6g"]
 script/source = "extends CanvasLayer
@@ -76,8 +77,6 @@ func load_config() -> void:
 radius = 0.33107638
 height = 0.7077691
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_t2gii"]
-
 [node name="player" type="CharacterBody3D" unique_id=1918745686]
 script = ExtResource("1_oul6g")
 
@@ -141,9 +140,8 @@ text = "jump hight
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.041612208, 0.35777256, -0.0067719817)
 shape = SubResource("CapsuleShape3D_1bvp3")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=593174975]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0313457, 0)
-mesh = SubResource("CapsuleMesh_t2gii")
-
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1795378332]
-transform = Transform3D(1, 0, 0, 0, 0.956483, 0.29178837, 0, -0.29178837, 0.956483, 0, 2.1770399, -0.08276582)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Flashlight" parent="." unique_id=1687413042 instance=ExtResource("2_rkbax")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15666962, 0.9903245, -0.1881446)
