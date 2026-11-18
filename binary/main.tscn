@@ -69,9 +69,9 @@ directional_shadow_max_distance = 251.0
 environment = SubResource("Environment_1bvp3")
 
 [node name="player" parent="." unique_id=1918745686 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(-0.93420297, 0, -0.35674194, 0, 1, 0, 0.35674194, 0, -0.93420297, -0.021686554, 1.1945622, -3.2029343)
+transform = Transform3D(-0.93420297, 0, -0.35674194, 0, 1, 0, 0.35674194, 0, -0.93420297, -1.2877836, 1.1945622, -26.692474)
 
-[node name="church" type="Node3D" parent="." unique_id=1329474423 instance=ExtResource("2_0xm2m")]
+[node name="church" parent="." unique_id=1329474423 instance=ExtResource("2_0xm2m")]
 transform = Transform3D(-0.9987276, 0, -0.05042949, 0, 1, 0, 0.05042949, 0, -0.9987276, 2.1556394, 1.4104621, -3.3429546)
 
 [node name="Terrain3D" type="Terrain3D" parent="." unique_id=1279869376]
